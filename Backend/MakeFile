@@ -1,0 +1,13 @@
+.PHONY: run proto
+
+run:
+	go run main.go
+
+proto:
+	@echo "Generating protobuf code..."
+	@protoc -I../protos \
+		--go_out=../protos --go_opt=paths=source_relative \
+		--go-grpc_out=../protos --go-grpc_opt=paths=source_relative \
+		--grpc-gateway_out=../protos --grpc-gateway_opt=paths=source_relative \
+		../protos/user/user.proto
+	@echo "Protobuf code generated successfully."

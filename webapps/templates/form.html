@@ -1,0 +1,33 @@
+{{template "layout.html"}}
+
+{{define "content"}}
+<h2>{{.Title}}</h2>
+<form id="userForm">
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{.User.Name}}" required>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{.User.Email}}" required {{if .User}}readonly{{end}}>
+    </div>
+    <div class="mb-3">
+        <label for="phone_number" class="form-label">Phone Number</label>
+        <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{.User.PhoneNumber}}">
+    </div>
+    <div class="mb-3">
+        <label for="dob" class="form-label">Date of Birth</label>
+        <input type="date" class="form-control" id="dob" name="dob" value="{{if .User}}{{.User.Dob.AsTime.Format "2006-01-02"}}{{end}}">
+    </div>
+    <div class="mb-3">
+        <label for="country" class="form-label">Country</label>
+        <input type="text" class="form-control" id="country" name="country" value="{{.User.Address.Country}}">
+    </div>
+     <div class="mb-3">
+        <label for="state" class="form-label">State</label>
+        <input type="text" class="form-control" id="state" name="state" value="{{.User.Address.State}}">
+    </div>
+    <button type="button" onclick="submitForm('{{.Method}}', '{{.Action}}')" class="btn btn-success">Submit</button>
+    <a href="/users" class="btn btn-secondary">Cancel</a>
+</form>
+{{end}}

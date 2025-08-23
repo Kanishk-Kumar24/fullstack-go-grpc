@@ -1,0 +1,16 @@
+{{template "layout.html"}}
+
+{{define "content"}}
+<h2>User Details</h2>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{.User.Name}}</h5>
+        <p class="card-text"><strong>ID:</strong> {{.User.UniqueId}}</p>
+        <p class="card-text"><strong>Email:</strong> {{.User.Email}}</p>
+        <p class="card-text"><strong>Phone:</strong> {{.User.PhoneNumber}}</p>
+        <p class="card-text"><strong>Date of Birth:</strong> {{.User.Dob.AsTime.Format "2006-01-02"}}</p>
+        <p class="card-text"><strong>Address:</strong> {{.User.Address.State}}, {{.User.Address.Country}}</p>
+        <a href="/users" class="btn btn-primary">Back to List</a>
+    </div>
+</div>
+{{end}}

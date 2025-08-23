@@ -1,0 +1,35 @@
+{{template "layout.html"}}
+
+{{define "content"}}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Users List</h2>
+    <a href="/users/new" class="btn btn-primary">Add New User</a>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{range .Users}}
+        <tr>
+            <td><a href="/users/{{.UniqueId}}">{{.Name}}</a></td>
+            <td>{{.Email}}</td>
+            <td>{{.PhoneNumber}}</td>
+            <td>
+                <a href="/users/edit/{{.UniqueId}}" class="btn btn-sm btn-secondary">Edit</a>
+                <button class="btn btn-sm btn-danger" onclick="deleteUser('{{.UniqueId}}')">Delete</button>
+            </td>
+        </tr>
+        {{else}}
+        <tr>
+            <td colspan="4" class="text-center">No users found.</td>
+        </tr>
+        {{end}}
+    </tbody>
+</table>
+{{end}}
