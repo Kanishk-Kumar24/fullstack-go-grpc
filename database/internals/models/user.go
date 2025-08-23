@@ -12,8 +12,7 @@ import (
 
 // User represents the user model in the database.
 type User struct {
-	bun.BaseModel `bun:"table:users,alias:u"`
-	BaseModel
+	BaseModel `bun:"table:users,alias:u"`
 
 	Name        string    `bun:"name,notnull"`
 	Email       string    `bun:"email,unique,notnull"`
@@ -23,26 +22,29 @@ type User struct {
 	State       string    `bun:"state"`
 }
 
-// BeforeAppendModel is a Bun hook that sets timestamps before inserting a new row.
+// BeforeAppendModel is a Bun hook that sets timestamps before creating.
 func (u *User) BeforeAppendModel(ctx context.Context, query bun.Query) error {
 	now := time.Now()
 	if u.CreatedAt.IsZero() {
 		u.CreatedAt = now
 	}
-	if u.UpdatedAt.IsZero() {
-		u.UpdatedAt = now
-	}
+	u.UpdatedAt = now
+	return nil
+}
+
+// BeforeUpdateModel is a Bun hook that sets the 'updated_at' timestamp before updating.
+func (u *User) BeforeUpdateModel(ctx context.Context, query bun.Query) error {
+	u.UpdatedAt = time.Now()
 	return nil
 }
 
 // ConvertToProto converts a database User model to a gRPC User message.
 func (u *User) ConvertToProto() *pb.User {
-	return &pb.User{
+	user := &pb.User{
 		UniqueId:    u.UniqueID.String(),
 		Name:        u.Name,
 		Email:       u.Email,
 		PhoneNumber: u.PhoneNumber,
-		Dob:         timestamppb.New(u.DOB),
 		Address: &pb.Address{
 			Country: u.Country,
 			State:   u.State,
@@ -50,6 +52,10 @@ func (u *User) ConvertToProto() *pb.User {
 		CreatedAt: timestamppb.New(u.CreatedAt),
 		UpdatedAt: timestamppb.New(u.UpdatedAt),
 	}
+	if !u.DOB.IsZero() {
+		user.Dob = timestamppb.New(u.DOB)
+	}
+	return user
 }
 
 // ConvertFromProto converts a gRPC CreateUserRequest to a database User model.
