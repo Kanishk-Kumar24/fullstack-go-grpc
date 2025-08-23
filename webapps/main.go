@@ -27,7 +27,14 @@ func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c 
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
-var userClient pb.UserServiceClient
+var userClient pb.UserServiceClient // client ko ek variable mein declare diye ho...
+// instance banane ke liye
+// struct is nothing but class...
+// class existance tabhi hota hai uska object create karte hai...
+//	1 unit
+
+// userClient => object
+//
 
 func main() {
 	// gRPC client connection
@@ -71,7 +78,7 @@ func listUsersHandler(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	resp, err := userClient.ListUsers(ctx, &pb.ListUsersRequest{})
+	resp, err := userClient.ListUsers(ctx, &pb.ListUsersRequest{}) // client call
 	if err != nil {
 		return c.String(http.StatusInternalServerError, fmt.Sprintf("Error listing users: %v", err))
 	}

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "fullstack-go-grpc/protos/user";
+
+message Base {
+    int64 created_at = 1;
+    string created_by = 2;
+    int64 updated_at = 3;
+    string updated_by = 4;
+    int64 id = 5;
+}
+
+enum Status {
+    STATUS_NOTDEFINED = 0;
+    STATUS_SUCESSFUL = 1;
+    STATUS_UNSUCESSFUL = 2;
+}
+// user define dataType => custom define dataType

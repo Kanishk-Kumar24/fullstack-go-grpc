@@ -13,10 +13,34 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+// Three tier architecture?
+// client --> server --> DB
+// DB --> server --> client
+
+// GRPC => g remot procdure call => function call/method call
+// Communication / network layer ==> mux
+// mux responsible hota hai, request ko sahi server ke method ke pass pauchana...
+
+// how GRCP fast ???
+// routes define .... 500 routes...
+// network 500 routes...
+
+// servers and server ke ander methods define kar diye
+// 500 route grpc => 80-100 serives divide hoga...
+// 5-6 methods honge harek service ke
+
+// map[string][]string, servieName => ["method1", "method2"]
+// O(1)
+// ~1
+
+// client/user ---> [grpcClient --> grpcServer] --> DB
+// restAPI client --> server --> DB
+// MVC => code structure...
+
 // UserController implements the gRPC UserServiceServer interface.
 type UserController struct {
-	pb.UnimplementedUserServiceServer
-	userService service.UserService
+	pb.UnimplementedUserServiceServer //
+	userService                       service.UserService
 }
 
 // NewUserController creates a new UserController.

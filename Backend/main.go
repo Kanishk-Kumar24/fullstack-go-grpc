@@ -22,8 +22,8 @@ import (
 )
 
 const (
-	grpcPort = "50051"
-	httpPort = "8081"
+	grpcPort = "50051" // server port
+	httpPort = "8081"  // html port
 )
 
 func main() {
@@ -37,12 +37,12 @@ func main() {
 		log.Fatal("DB_DSN environment variable not set")
 	}
 
-	// Create a context that is cancelled on interruption
+	// Create a context that is cancelled on interruption (ctrl + c, ctrl +z)
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer cancel()
 
 	// Database connection
-	db := database.NewPostgresDB(dsn)
+	db := database.NewPostgresDB(dsn) // dsn => DataSource Name
 	defer db.Close()
 
 	// Automatically create schema on startup
@@ -50,8 +50,16 @@ func main() {
 		log.Fatalf("Failed to create database schema: %v", err)
 	}
 
-	// Initialize service and controller
+	// Initailizing the DB instance
 	userService := service.NewUserService(db)
+	// Db isntance create kiya
+	// db instance ko humne controller mein ===> controller se humse services call kiye...
+	// serives ==> business logics ek hum generally ek DB call karte hai
+	// DB ==> Data, err, empty===>
+	// Data ==> response(response body) mein set karenge...
+
+	// service => controller ==> client ke pass / jaha se call ho raha tha...
+
 	userController := controller.NewUserController(userService)
 
 	// Start gRPC server
@@ -82,8 +90,8 @@ func runGrpcServer(userController *controller.UserController) error {
 
 	// Create a new gRPC server
 	s := grpc.NewServer()
-	pb.RegisterUserServiceServer(s, userController)
-	reflection.Register(s) // Enable server reflection
+	pb.RegisterUserServiceServer(s, userController) // server expose karna
+	reflection.Register(s)                          // Enable server reflection
 
 	log.Printf("gRPC server listening at %v", lis.Addr())
 	return s.Serve(lis)

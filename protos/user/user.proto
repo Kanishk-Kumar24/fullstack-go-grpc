@@ -5,104 +5,82 @@ package user;
 option go_package = "fullstack-go-grpc/protos/user";
 
 import "google/api/annotations.proto";
-import "google/protobuf/timestamp.proto";
-
-// Address represents a geographical address.
-message Address {
-    string country = 1;
-    string state = 2;
-}
-
-// User represents a user entity.
-message User {
-    string unique_id = 1;
-    string name = 2;
-    string email = 3;
-    string phone_number = 4;
-    google.protobuf.Timestamp dob = 5;
-    Address address = 6;
-    google.protobuf.Timestamp created_at = 7;
-    google.protobuf.Timestamp updated_at = 8;
-}
-
-// Requests and Responses for UserService
-
-message CreateUserRequest {
-    string name = 1;
-    string email = 2;
-    string phone_number = 3;
-    google.protobuf.Timestamp dob = 4;
-    Address address = 5;
-}
-
-message CreateUserResponse {
-    User user = 1;
-}
-
-message GetUserRequest {
-    string unique_id = 1;
-}
-
-message GetUserResponse {
-    User user = 1;
-}
-
-message UpdateUserRequest {
-    string unique_id = 1;
-    string name = 2;
-    string phone_number = 3;
-    Address address = 5;
-}
-
-message UpdateUserResponse {
-    User user = 1;
-}
-
-message DeleteUserRequest {
-    string unique_id = 1;
-}
-
-message DeleteUserResponse {
-    string message = 1;
-}
-
-message ListUsersRequest {}
-
-message ListUsersResponse {
-    repeated User users = 1;
-}
+import "fullstack-go-grpc/protos/user/base.proto"
 
 // UserService defines the gRPC service for managing users.
+
+// UserService ===> Servive hai
+// rpc likhe hue ahi wo humare methods hai..,
+// message is nothing but json structure...
+
+// jitene bhi time stamps the, unhe humne int64 mein convert kar diya...
+// so that we can save the time in standard of unix.
+// unix time ke standard mein save karna hai...
+// and humein jaha bhi unix time required hoga, waha pr hum ek function call karke usko wapas se time stamp pe convert kar denge...
+
 service UserService {
-    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+    rpc CreateUser(UserRequest) returns (UserServiceResponse) {
         option (google.api.http) = {
             post: "/v1/users"
             body: "*"
         };
     }
 
-    rpc GetUser(GetUserRequest) returns (GetUserResponse) {
+    rpc GetUser(GetUserRequest) returns (UserServiceResponse) {
+        // http annotations/ endpoint
         option (google.api.http) = {
             get: "/v1/users/{unique_id}"
         };
     }
 
-    rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {
+    rpc UpdateUser(UserRequest) returns (UserServiceResponse) {
         option (google.api.http) = {
             put: "/v1/users/{unique_id}"
             body: "*"
         };
     }
 
-    rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {
+    rpc DeleteUser(GetUserRequest) returns (UserServiceResponse) {
         option (google.api.http) = {
             delete: "/v1/users/{unique_id}"
         };
     }
 
-    rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
+    rpc ListUsers(GetUserRequest) returns (UserServiceResponse) {
         option (google.api.http) = {
             get: "/v1/users"
         };
     }
+}
+
+message UserRequest {
+    UserSpecification spec = 1;
+}
+
+message UserSpecification {
+    string name = 1;
+    string email = 2;
+    string phone_number = 3;
+    int64 dob = 4;
+    Address address = 5;
+    Base base = 6;
+    string user_id = 7;
+}
+
+// NOTE := user_id is nothing but uuid. users unique_id
+
+message Address {
+    string country = 1;
+    string state = 2;
+}
+
+message UserServiceResponse {
+    string status_code = 1;
+    Status status = 2;
+    string success_message = 3;
+    repeated UserSpecification output = 4;
+}
+
+message GetUserRequest {
+    string user_id = 1;
 }

@@ -14,6 +14,22 @@ import (
 )
 
 // NewPostgresDB creates a new Bun DB instance.
+// DataBase => SQL(innoba DB), postgress(khud ka engine) ==> innoba DB
+// MySQL and Postgree ye dono alag DB hai...
+// schema ==> kuch hota hai...
+// MySQL => 1 schema => 1 DB => n*tables
+// Postgress => 1 schema => n*DB => in each DB => n*tables
+
+// NoSQL => json Data...
+// Key value paris ke form mein store hota hai..
+// VetorDB => collection => DB
+// points => table
+// vetor embeedings
+// vector cosine simialrity, knn, eculidian distance method...
+
+// query ==> predeifed ==> mapped(query)  treesbinarrysearching => log n => n
+// "select * from users" => "select" "*" "from" "users"
+
 func NewPostgresDB(dsn string) *bun.DB {
 	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dsn)))
 	db := bun.NewDB(sqldb, pgdialect.New())
