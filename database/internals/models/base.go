@@ -4,12 +4,12 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/uptrace/bun"
+	// "github.com/uptrace/bun"
 )
 
 // BaseModel defines common fields for all models.
 type BaseModel struct {
-	bun.BaseModel `bun:",extend"`
+	// bun.BaseModel `bun:",extend"`
 
 	ID        int64     `bun:"id,pk,autoincrement"`
 	UniqueID  uuid.UUID `bun:"unique_id,type:uuid,default:gen_random_uuid()"`
