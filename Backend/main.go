@@ -102,6 +102,8 @@ func runHttpServer(ctx context.Context) error {
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	grpcEndpoint := "localhost:" + grpcPort
+	log.Println("Connecting to gRPC server at", grpcEndpoint)
+
 	if err := pb.RegisterUserServiceHandlerFromEndpoint(ctx, mux, grpcEndpoint, opts); err != nil {
 		return err
 	}
