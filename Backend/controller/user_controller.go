@@ -17,6 +17,11 @@ import (
 // client --> server --> DB
 // DB --> server --> client
 
+// client request service => form fill => form ke data ko JSON object convert kiya hoga...
+// restAPI call karoge through fetchAPI(backend call)
+// server request json structure banaye the ==> proto mein convert kar dega..
+// proto structs ayenge...
+
 // GRPC => g remot procdure call => function call/method call
 // Communication / network layer ==> mux
 // mux responsible hota hai, request ko sahi server ke method ke pass pauchana...
@@ -48,7 +53,7 @@ func NewUserController(userService service.UserService) *UserController {
 	return &UserController{userService: userService}
 }
 
-func (c *UserController) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+func (c *UserController) CreateUser(ctx context.Context, req *pb.UserRequest) (*pb.UserServiceResponse, error) {
 	log.Printf("CreateUser RPC called")
 	var user models.User
 	user.ConvertFromProto(req)
@@ -58,7 +63,7 @@ func (c *UserController) CreateUser(ctx context.Context, req *pb.CreateUserReque
 		return nil, status.Errorf(codes.Internal, "failed to create user: %v", err)
 	}
 
-	return &pb.CreateUserResponse{User: createdUser.ConvertToProto()}, nil
+	return &pb.UserServiceResponse{User: createdUser.ConvertToProto()}, nil
 }
 
 func (c *UserController) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.GetUserResponse, error) {
