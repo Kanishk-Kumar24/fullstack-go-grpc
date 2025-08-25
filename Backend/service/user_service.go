@@ -29,14 +29,14 @@ func NewUserService(userRepo repo.UserRepo) *UserService{
 	return &UserService{userRepo: userRepo}
 }
 
-func (s *UserService) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*models.User, error) {
+func (s *UserService) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
 	var user models.User
 	user.ConvertFromProto(req)
 	err := s.userRepo.CreateUser(ctx,&user)
 	if err != nil {
 		return nil, err
 	}
-	return &user, nil
+	return &pb.CreateUserResponse{User: user.ConvertToProto()}, nil
 }
 
 func (s *UserService) GetUserByID(ctx context.Context, id uuid.UUID) (*models.User, error) {
@@ -48,7 +48,7 @@ func (s *UserService) GetUserByID(ctx context.Context, id uuid.UUID) (*models.Us
 	return &user, nil
 }
 
-func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*models.User, error) {
+func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
 	
 	id,err:= uuid.Parse(req.UniqueId)
 	if err!=nil{
@@ -69,7 +69,7 @@ func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 	if er != nil {
 		return nil, er
 	}
-	return user, nil
+	return &pb.UpdateUserResponse{User: user.ConvertToProto()}, nil
 }
 
 func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) error {
@@ -81,11 +81,16 @@ func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest)
 	return er
 }
 
-func (s *UserService) ListUsers(ctx context.Context) ([]models.User, error) {
+func (s *UserService) ListUsers(ctx context.Context) (*pb.ListUsersResponse, error) {
 	var users []models.User
 	err := s.userRepo.ListUsers(ctx, users)
 	if err != nil {
 		return nil, err
 	}
-	return users, nil
+	var pbUsers []*pb.User
+	for _, user := range users {
+		pbUsers = append(pbUsers, user.ConvertToProto())
+	}
+
+	return &pb.ListUsersResponse{Users: pbUsers}, nil
 }

@@ -25,7 +25,7 @@ func (c *UserController) CreateUser(ctx context.Context, req *pb.CreateUserReque
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to create user: %v", err)
 	}
-	return &pb.CreateUserResponse{User: createdUser.ConvertToProto()}, nil
+	return createdUser, nil
 }
 
 func (c *UserController) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.GetUserResponse, error) {
@@ -49,7 +49,7 @@ func (c *UserController) UpdateUser(ctx context.Context, req *pb.UpdateUserReque
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to update user: %v", err)
 	}
-	return &pb.UpdateUserResponse{User: updatedUser.ConvertToProto()}, nil
+	return updatedUser, nil
 }
 
 func (c *UserController) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
@@ -64,10 +64,5 @@ func (c *UserController) ListUsers(ctx context.Context, req *pb.ListUsersRequest
 		return nil, status.Errorf(codes.Internal, "failed to list users: %v", err)
 	}
 
-	var pbUsers []*pb.User
-	for _, user := range users {
-		pbUsers = append(pbUsers, user.ConvertToProto())
-	}
-
-	return &pb.ListUsersResponse{Users: pbUsers}, nil
+	return users, nil
 }
