@@ -3,37 +3,28 @@ package controller
 import (
 	"context"
 	"log"
-
 	"fullstack-go-grpc/backend/service"
-	"fullstack-go-grpc/database/internals/models"
 	pb "fullstack-go-grpc/protos/user"
-
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-// UserController implements the gRPC UserServiceServer interface.
 type UserController struct {
 	pb.UnimplementedUserServiceServer
 	userService service.UserService
 }
 
-// NewUserController creates a new UserController.
 func NewUserController(userService service.UserService) *UserController {
 	return &UserController{userService: userService}
 }
 
 func (c *UserController) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
 	log.Printf("CreateUser RPC called")
-	var user models.User
-	user.ConvertFromProto(req)
-
-	createdUser, err := c.userService.CreateUser(ctx, &user)
+	createdUser, err := c.userService.CreateUser(ctx, req)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to create user: %v", err)
 	}
-
 	return &pb.CreateUserResponse{User: createdUser.ConvertToProto()}, nil
 }
 
@@ -54,45 +45,15 @@ func (c *UserController) GetUser(ctx context.Context, req *pb.GetUserRequest) (*
 
 func (c *UserController) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
 	log.Printf("UpdateUser RPC called with ID: %s", req.UniqueId)
-	id, err := uuid.Parse(req.UniqueId)
-	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, "invalid UUID format: %v", err)
-	}
-
-	// Fetch existing user
-	user, err := c.userService.GetUserByID(ctx, id)
-	if err != nil {
-		return nil, status.Errorf(codes.NotFound, "user not found for update: %v", err)
-	}
-
-	// Update fields
-	user.Name = req.Name
-	user.PhoneNumber = req.PhoneNumber
-	if req.Address != nil {
-		user.Country = req.Address.Country
-		user.State = req.Address.State
-	}
-
-	updatedUser, err := c.userService.UpdateUser(ctx, user)
+	updatedUser, err := c.userService.UpdateUser(ctx, req)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to update user: %v", err)
 	}
-
 	return &pb.UpdateUserResponse{User: updatedUser.ConvertToProto()}, nil
 }
 
 func (c *UserController) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
 	log.Printf("DeleteUser RPC called with ID: %s", req.UniqueId)
-	id, err := uuid.Parse(req.UniqueId)
-	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, "invalid UUID format: %v", err)
-	}
-
-	err = c.userService.DeleteUser(ctx, id)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to delete user: %v", err)
-	}
-
 	return &pb.DeleteUserResponse{Message: "User deleted successfully"}, nil
 }
 

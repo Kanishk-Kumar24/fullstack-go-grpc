@@ -2,66 +2,88 @@ package service
 
 import (
 	"context"
+	"fullstack-go-grpc/internals/models"
+	pb "fullstack-go-grpc/protos/user"
 	"time"
-
-	"fullstack-go-grpc/database/internals/models"
-
 	"github.com/google/uuid"
-	"github.com/uptrace/bun"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"fullstack-go-grpc/backend/repo"
 )
 
 // UserService provides business logic for user operations.
-type UserService interface {
-	CreateUser(ctx context.Context, user *models.User) (*models.User, error)
-	GetUserByID(ctx context.Context, id uuid.UUID) (*models.User, error)
-	UpdateUser(ctx context.Context, user *models.User) (*models.User, error)
-	DeleteUser(ctx context.Context, id uuid.UUID) error
-	ListUsers(ctx context.Context) ([]models.User, error)
+// type UserService interface {
+// 	CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*models.User, error)
+// 	GetUserByID(ctx context.Context, id uuid.UUID) (*models.User, error)
+// 	UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*models.User, error)
+// 	DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) error
+// 	ListUsers(ctx context.Context) ([]models.User, error)
+// }
+
+
+type UserService struct{
+	userRepo repo.UserRepo
 }
 
-type userServiceImpl struct {
-	db *bun.DB
+func NewUserService(userRepo repo.UserRepo) *UserService{
+	return &UserService{userRepo: userRepo}
 }
 
-// NewUserService creates a new UserService.
-func NewUserService(db *bun.DB) UserService {
-	return &userServiceImpl{db: db}
-}
-
-func (s *userServiceImpl) CreateUser(ctx context.Context, user *models.User) (*models.User, error) {
-	_, err := s.db.NewInsert().Model(user).Exec(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return user, nil
-}
-
-func (s *userServiceImpl) GetUserByID(ctx context.Context, id uuid.UUID) (*models.User, error) {
+func (s *UserService) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*models.User, error) {
 	var user models.User
-	err := s.db.NewSelect().Model(&user).Where("unique_id = ?", id).Scan(ctx)
+	user.ConvertFromProto(req)
+	err := s.userRepo.CreateUser(ctx,&user)
 	if err != nil {
 		return nil, err
 	}
 	return &user, nil
 }
 
-func (s *userServiceImpl) UpdateUser(ctx context.Context, user *models.User) (*models.User, error) {
-	user.UpdatedAt = time.Now()
-	_, err := s.db.NewUpdate().Model(user).Where("id = ?", user.ID).Exec(ctx)
+func (s *UserService) GetUserByID(ctx context.Context, id uuid.UUID) (*models.User, error) {
+	var user models.User
+	err := s.userRepo.GetUserByID(ctx,id,&user)
 	if err != nil {
 		return nil, err
+	}
+	return &user, nil
+}
+
+func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*models.User, error) {
+	
+	id,err:= uuid.Parse(req.UniqueId)
+	if err!=nil{
+		return nil,err
+	}
+	user,err:= s.GetUserByID(ctx,id)
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, "user not found for update: %v", err)
+	}
+	user.Name = req.Name
+	user.PhoneNumber = req.PhoneNumber
+	if req.Address != nil {
+		user.Country = req.Address.Country
+		user.State = req.Address.State
+	}
+	user.UpdatedAt = time.Now()
+	er := s.userRepo.UpdateUser(ctx,user)
+	if er != nil {
+		return nil, er
 	}
 	return user, nil
 }
 
-func (s *userServiceImpl) DeleteUser(ctx context.Context, id uuid.UUID) error {
-	_, err := s.db.NewDelete().Model((*models.User)(nil)).Where("unique_id = ?", id).Exec(ctx)
-	return err
+func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) error {
+	id,err:=uuid.Parse(req.UniqueId)
+	if err != nil {
+		return status.Errorf(codes.InvalidArgument, "invalid UUID format: %v", err)
+	}
+	er := s.userRepo.DeleteUser(ctx,id)
+	return er
 }
 
-func (s *userServiceImpl) ListUsers(ctx context.Context) ([]models.User, error) {
+func (s *UserService) ListUsers(ctx context.Context) ([]models.User, error) {
 	var users []models.User
-	err := s.db.NewSelect().Model(&users).Order("created_at DESC").Scan(ctx)
+	err := s.userRepo.ListUsers(ctx, users)
 	if err != nil {
 		return nil, err
 	}

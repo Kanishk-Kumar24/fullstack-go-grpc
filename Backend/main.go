@@ -8,7 +8,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-
+	"fullstack-go-grpc/backend/repo"
 	"fullstack-go-grpc/backend/controller"
 	"fullstack-go-grpc/backend/service"
 	"fullstack-go-grpc/database"
@@ -51,8 +51,10 @@ func main() {
 	}
 
 	// Initialize service and controller
-	userService := service.NewUserService(db)
-	userController := controller.NewUserController(userService)
+	userRepo := repo.NewUserRepo(db)
+	userService := service.NewUserService(*userRepo)
+	userController := controller.NewUserController(*userService)
+
 
 	// Start gRPC server
 	go func() {
@@ -105,6 +107,19 @@ func runHttpServer(ctx context.Context) error {
 		Handler: mux,
 	}
 
+	// Graceful shutdown for the HTTP server
+	go func() {
+		<-ctx.Done()
+		log.Println("Shutting down HTTP server...")
+		if err := server.Shutdown(context.Background()); err != nil {
+			log.Printf("Failed to shut down HTTP server: %v", err)
+		}
+	}()
+
 	log.Printf("HTTP server listening at %s", server.Addr)
-	return server.ListenAndServe()
+	if err := server.ListenAndServe(); err != http.ErrServerClosed {
+		return err
+	}
+
+	return nil
 }
