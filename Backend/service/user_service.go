@@ -77,13 +77,12 @@ func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest)
 	if err != nil {
 		return status.Errorf(codes.InvalidArgument, "invalid UUID format: %v", err)
 	}
-	er := s.userRepo.DeleteUser(ctx,id)
-	return er
+	return s.userRepo.DeleteUser(ctx,id)
 }
 
 func (s *UserService) ListUsers(ctx context.Context) (*pb.ListUsersResponse, error) {
 	var users []models.User
-	err := s.userRepo.ListUsers(ctx, users)
+	err := s.userRepo.ListUsers(ctx, &users)
 	if err != nil {
 		return nil, err
 	}

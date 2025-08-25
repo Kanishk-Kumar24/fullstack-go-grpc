@@ -54,6 +54,10 @@ func (c *UserController) UpdateUser(ctx context.Context, req *pb.UpdateUserReque
 
 func (c *UserController) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
 	log.Printf("DeleteUser RPC called with ID: %s", req.UniqueId)
+	err := c.userService.DeleteUser(ctx, req)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to delete user: %v", err)
+	}
 	return &pb.DeleteUserResponse{Message: "User deleted successfully"}, nil
 }
 
