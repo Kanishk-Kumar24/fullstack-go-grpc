@@ -58,9 +58,6 @@ message UpdateUserRequest {
     string phone_number = 3;
     Address address = 5;
 }
-message DeleteUserRequest {
-    string unique_id = 1;
-}
 message DeleteUserResponse {
     string message = 1;
 }
