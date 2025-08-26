@@ -64,7 +64,7 @@ func local_request_UserService_CreateUser_0(ctx context.Context, marshaler runti
 
 func request_UserService_GetUser_0(ctx context.Context, marshaler runtime.Marshaler, client UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq U_ID
+		protoReq UserGetterRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -85,7 +85,7 @@ func request_UserService_GetUser_0(ctx context.Context, marshaler runtime.Marsha
 
 func local_request_UserService_GetUser_0(ctx context.Context, marshaler runtime.Marshaler, server UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq U_ID
+		protoReq UserGetterRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -148,7 +148,7 @@ func local_request_UserService_UpdateUser_0(ctx context.Context, marshaler runti
 
 func request_UserService_DeleteUser_0(ctx context.Context, marshaler runtime.Marshaler, client UserServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq U_ID
+		protoReq UserGetterRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
@@ -169,7 +169,7 @@ func request_UserService_DeleteUser_0(ctx context.Context, marshaler runtime.Mar
 
 func local_request_UserService_DeleteUser_0(ctx context.Context, marshaler runtime.Marshaler, server UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq U_ID
+		protoReq UserGetterRequest
 		metadata runtime.ServerMetadata
 		err      error
 	)
