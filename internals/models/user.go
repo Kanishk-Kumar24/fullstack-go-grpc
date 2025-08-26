@@ -59,7 +59,7 @@ func (u *User) ConvertToProto() *pb.User {
 }
 
 // ConvertFromProto converts a gRPC CreateUserRequest to a database User model.
-func (u *User) ConvertFromProto(req *pb.CreateUserRequest) {
+func (u *User) ConvertFromProto(req *pb.User) {
 	u.Name = req.Name
 	u.Email = req.Email
 	u.PhoneNumber = req.PhoneNumber

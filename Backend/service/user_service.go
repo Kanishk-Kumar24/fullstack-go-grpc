@@ -4,11 +4,11 @@ import (
 	"context"
 	"fullstack-go-grpc/internals/models"
 	pb "fullstack-go-grpc/protos/user"
-	"time"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"fullstack-go-grpc/backend/repo"
+	"time"
 )
 
 // UserService provides business logic for user operations.
@@ -29,14 +29,14 @@ func NewUserService(userRepo repo.UserRepo) *UserService{
 	return &UserService{userRepo: userRepo}
 }
 
-func (s *UserService) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+func (s *UserService) CreateUser(ctx context.Context, req *pb.UserRequest) (*pb.UserResponse, error) {
 	var user models.User
-	user.ConvertFromProto(req)
+	user.ConvertFromProto(req.User)
 	err := s.userRepo.CreateUser(ctx,&user)
 	if err != nil {
 		return nil, err
 	}
-	return &pb.CreateUserResponse{User: user.ConvertToProto()}, nil
+	return &pb.UserResponse{User: user.ConvertToProto()}, nil
 }
 
 func (s *UserService) GetUserByID(ctx context.Context, id uuid.UUID) (*models.User, error) {
@@ -48,7 +48,7 @@ func (s *UserService) GetUserByID(ctx context.Context, id uuid.UUID) (*models.Us
 	return &user, nil
 }
 
-func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
+func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UserResponse, error) {
 	
 	id,err:= uuid.Parse(req.UniqueId)
 	if err!=nil{
@@ -69,18 +69,22 @@ func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 	if er != nil {
 		return nil, er
 	}
-	return &pb.UpdateUserResponse{User: user.ConvertToProto()}, nil
+	return &pb.UserResponse{User: user.ConvertToProto()}, nil
 }
 
-func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) error {
+func (s *UserService) DeleteUser(ctx context.Context, req *pb.U_ID) (*pb.DeleteUserResponse, error) {
 	id,err:=uuid.Parse(req.UniqueId)
 	if err != nil {
-		return status.Errorf(codes.InvalidArgument, "invalid UUID format: %v", err)
+		return nil, status.Errorf(codes.InvalidArgument, "invalid UUID format: %v", err)
 	}
-	return s.userRepo.DeleteUser(ctx,id)
+	err = s.userRepo.DeleteUser(ctx,id)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.DeleteUserResponse{Message: "User deleted successfully"}, nil
 }
 
-func (s *UserService) ListUsers(ctx context.Context) (*pb.ListUsersResponse, error) {
+func (s *UserService) ListUsers(ctx context.Context, req *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
 	var users []models.User
 	err := s.userRepo.ListUsers(ctx, &users)
 	if err != nil {

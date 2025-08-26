@@ -86,7 +86,7 @@ func getUserHandler(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	resp, err := userClient.GetUser(ctx, &pb.GetUserRequest{UniqueId: id})
+	resp, err := userClient.GetUser(ctx, &pb.U_ID{UniqueId: id})
 	if err != nil {
 		return c.String(http.StatusNotFound, fmt.Sprintf("Error getting user: %v", err))
 	}
@@ -110,7 +110,7 @@ func editUserFormHandler(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	resp, err := userClient.GetUser(ctx, &pb.GetUserRequest{UniqueId: id})
+	resp, err := userClient.GetUser(ctx, &pb.U_ID{UniqueId: id})
 	if err != nil {
 		return c.String(http.StatusNotFound, fmt.Sprintf("Error getting user for edit: %v", err))
 	}

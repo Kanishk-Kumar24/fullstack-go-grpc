@@ -12,14 +12,14 @@ import (
 
 type UserController struct {
 	pb.UnimplementedUserServiceServer
-	userService service.UserService
+	userService *service.UserService
 }
 
-func NewUserController(userService service.UserService) *UserController {
+func NewUserController(userService *service.UserService) *UserController {
 	return &UserController{userService: userService}
 }
 
-func (c *UserController) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+func (c *UserController) CreateUser(ctx context.Context, req *pb.UserRequest) (*pb.UserResponse, error) {
 	log.Printf("CreateUser RPC called")
 	createdUser, err := c.userService.CreateUser(ctx, req)
 	if err != nil {
@@ -28,7 +28,7 @@ func (c *UserController) CreateUser(ctx context.Context, req *pb.CreateUserReque
 	return createdUser, nil
 }
 
-func (c *UserController) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.GetUserResponse, error) {
+func (c *UserController) GetUser(ctx context.Context, req *pb.U_ID) (*pb.UserResponse, error) {
 	log.Printf("GetUser RPC called with ID: %s", req.UniqueId)
 	id, err := uuid.Parse(req.UniqueId)
 	if err != nil {
@@ -40,10 +40,10 @@ func (c *UserController) GetUser(ctx context.Context, req *pb.GetUserRequest) (*
 		return nil, status.Errorf(codes.NotFound, "user not found: %v", err)
 	}
 
-	return &pb.GetUserResponse{User: user.ConvertToProto()}, nil
+	return &pb.UserResponse{User: user.ConvertToProto()}, nil
 }
 
-func (c *UserController) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
+func (c *UserController) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UserResponse, error) {
 	log.Printf("UpdateUser RPC called with ID: %s", req.UniqueId)
 	updatedUser, err := c.userService.UpdateUser(ctx, req)
 	if err != nil {
@@ -52,18 +52,18 @@ func (c *UserController) UpdateUser(ctx context.Context, req *pb.UpdateUserReque
 	return updatedUser, nil
 }
 
-func (c *UserController) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
+func (c *UserController) DeleteUser(ctx context.Context, req *pb.U_ID) (*pb.DeleteUserResponse, error) {
 	log.Printf("DeleteUser RPC called with ID: %s", req.UniqueId)
-	err := c.userService.DeleteUser(ctx, req)
+	deletedUser, err := c.userService.DeleteUser(ctx, req)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to delete user: %v", err)
 	}
-	return &pb.DeleteUserResponse{Message: "User deleted successfully"}, nil
+	return deletedUser, nil
 }
 
 func (c *UserController) ListUsers(ctx context.Context, req *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
 	log.Printf("ListUsers RPC called")
-	users, err := c.userService.ListUsers(ctx)
+	users, err := c.userService.ListUsers(ctx, req)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to list users: %v", err)
 	}

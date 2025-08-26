@@ -53,7 +53,7 @@ func main() {
 	// Initialize service and controller
 	userRepo := repo.NewUserRepo(db)
 	userService := service.NewUserService(*userRepo)
-	userController := controller.NewUserController(*userService)
+	userController := controller.NewUserController(userService)
 
 
 	// Start gRPC server
