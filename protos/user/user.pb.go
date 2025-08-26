@@ -68,7 +68,8 @@ func (x *U_ID) GetUniqueId() string {
 
 type UserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	Uid           *U_ID                  `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	User          *User                  `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -101,6 +102,13 @@ func (x *UserRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use UserRequest.ProtoReflect.Descriptor instead.
 func (*UserRequest) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *UserRequest) GetUid() *U_ID {
+	if x != nil {
+		return x.Uid
+	}
+	return nil
 }
 
 func (x *UserRequest) GetUser() *User {
@@ -360,9 +368,11 @@ const file_user_user_proto_rawDesc = "" +
 	"\n" +
 	"\x0fuser/user.proto\x12\x04user\x1a\x1cgoogle/api/annotations.proto\x1a\x0fuser/base.proto\"#\n" +
 	"\x04U_ID\x12\x1b\n" +
-	"\tunique_id\x18\x01 \x01(\tR\buniqueId\"-\n" +
-	"\vUserRequest\x12\x1e\n" +
-	"\x04user\x18\x01 \x01(\v2\n" +
+	"\tunique_id\x18\x01 \x01(\tR\buniqueId\"K\n" +
+	"\vUserRequest\x12\x1c\n" +
+	"\x03uid\x18\x01 \x01(\v2\n" +
+	".user.U_IDR\x03uid\x12\x1e\n" +
+	"\x04user\x18\x02 \x01(\v2\n" +
 	".user.UserR\x04user\"L\n" +
 	"\fUserResponse\x12\x1c\n" +
 	"\x03uid\x18\x01 \x01(\v2\n" +
@@ -417,26 +427,27 @@ var file_user_user_proto_goTypes = []any{
 	(*Address)(nil),            // 8: user.Address
 }
 var file_user_user_proto_depIdxs = []int32{
-	7,  // 0: user.UserRequest.user:type_name -> user.User
-	0,  // 1: user.UserResponse.uid:type_name -> user.U_ID
-	7,  // 2: user.UserResponse.user:type_name -> user.User
-	8,  // 3: user.UpdateUserRequest.address:type_name -> user.Address
-	7,  // 4: user.ListUsersResponse.users:type_name -> user.User
-	1,  // 5: user.UserService.CreateUser:input_type -> user.UserRequest
-	0,  // 6: user.UserService.GetUser:input_type -> user.U_ID
-	3,  // 7: user.UserService.UpdateUser:input_type -> user.UpdateUserRequest
-	0,  // 8: user.UserService.DeleteUser:input_type -> user.U_ID
-	5,  // 9: user.UserService.ListUsers:input_type -> user.ListUsersRequest
-	2,  // 10: user.UserService.CreateUser:output_type -> user.UserResponse
-	2,  // 11: user.UserService.GetUser:output_type -> user.UserResponse
-	2,  // 12: user.UserService.UpdateUser:output_type -> user.UserResponse
-	4,  // 13: user.UserService.DeleteUser:output_type -> user.DeleteUserResponse
-	6,  // 14: user.UserService.ListUsers:output_type -> user.ListUsersResponse
-	10, // [10:15] is the sub-list for method output_type
-	5,  // [5:10] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+	0,  // 0: user.UserRequest.uid:type_name -> user.U_ID
+	7,  // 1: user.UserRequest.user:type_name -> user.User
+	0,  // 2: user.UserResponse.uid:type_name -> user.U_ID
+	7,  // 3: user.UserResponse.user:type_name -> user.User
+	8,  // 4: user.UpdateUserRequest.address:type_name -> user.Address
+	7,  // 5: user.ListUsersResponse.users:type_name -> user.User
+	1,  // 6: user.UserService.CreateUser:input_type -> user.UserRequest
+	0,  // 7: user.UserService.GetUser:input_type -> user.U_ID
+	3,  // 8: user.UserService.UpdateUser:input_type -> user.UpdateUserRequest
+	0,  // 9: user.UserService.DeleteUser:input_type -> user.U_ID
+	5,  // 10: user.UserService.ListUsers:input_type -> user.ListUsersRequest
+	2,  // 11: user.UserService.CreateUser:output_type -> user.UserResponse
+	2,  // 12: user.UserService.GetUser:output_type -> user.UserResponse
+	2,  // 13: user.UserService.UpdateUser:output_type -> user.UserResponse
+	4,  // 14: user.UserService.DeleteUser:output_type -> user.DeleteUserResponse
+	6,  // 15: user.UserService.ListUsers:output_type -> user.ListUsersResponse
+	11, // [11:16] is the sub-list for method output_type
+	6,  // [6:11] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_user_user_proto_init() }

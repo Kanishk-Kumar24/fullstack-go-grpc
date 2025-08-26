@@ -34,12 +34,10 @@ func (c *UserController) GetUser(ctx context.Context, req *pb.U_ID) (*pb.UserRes
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid UUID format: %v", err)
 	}
-
 	user, err := c.userService.GetUserByID(ctx, id)
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, "user not found: %v", err)
 	}
-
 	return &pb.UserResponse{User: user.ConvertToProto()}, nil
 }
 

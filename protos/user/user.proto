@@ -46,7 +46,8 @@ message U_ID{
 }
 
 message UserRequest {
-    User user =1;
+    U_ID uid =1;
+    User user =2;
 }
 message UserResponse {
     U_ID uid =1;
