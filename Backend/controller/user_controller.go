@@ -28,18 +28,16 @@ func (c *UserController) CreateUser(ctx context.Context, req *pb.UserRequest) (*
 	return createdUser, nil
 }
 
-func (c *UserController) GetUser(ctx context.Context, req *pb.U_ID) (*pb.UserResponse, error) {
+func (c *UserController) GetUser(ctx context.Context, req *pb.UserGetterRequest) (*pb.UserResponse, error) {
 	log.Printf("GetUser RPC called with ID: %s", req.UniqueId)
 	id, err := uuid.Parse(req.UniqueId)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid UUID format: %v", err)
 	}
-
 	user, err := c.userService.GetUserByID(ctx, id)
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, "user not found: %v", err)
 	}
-
 	return &pb.UserResponse{User: user.ConvertToProto()}, nil
 }
 
@@ -52,7 +50,7 @@ func (c *UserController) UpdateUser(ctx context.Context, req *pb.UpdateUserReque
 	return updatedUser, nil
 }
 
-func (c *UserController) DeleteUser(ctx context.Context, req *pb.U_ID) (*pb.DeleteUserResponse, error) {
+func (c *UserController) DeleteUser(ctx context.Context, req *pb.UserGetterRequest) (*pb.DeleteUserResponse, error) {
 	log.Printf("DeleteUser RPC called with ID: %s", req.UniqueId)
 	deletedUser, err := c.userService.DeleteUser(ctx, req)
 	if err != nil {

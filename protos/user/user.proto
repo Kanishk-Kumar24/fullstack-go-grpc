@@ -49,7 +49,8 @@ message UserGetterRequest{
 }
 
 message UserRequest {
-    User user =1;
+    UserGetterRequest uid =1;
+    User user =2;
 }
 message UserResponse {
     UserGetterRequest uid =1;

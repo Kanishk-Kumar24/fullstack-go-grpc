@@ -72,7 +72,7 @@ func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 	return &pb.UserResponse{User: user.ConvertToProto()}, nil
 }
 
-func (s *UserService) DeleteUser(ctx context.Context, req *pb.U_ID) (*pb.DeleteUserResponse, error) {
+func (s *UserService) DeleteUser(ctx context.Context, req *pb.UserGetterRequest) (*pb.DeleteUserResponse, error) {
 	id,err:=uuid.Parse(req.UniqueId)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid UUID format: %v", err)
