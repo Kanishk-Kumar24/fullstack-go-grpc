@@ -3,18 +3,10 @@ package repo
 import (
 	"context"
 	"fullstack-go-grpc/internals/models"
-
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 )
 
-// type UserRepo interface {
-// 	CreateUser(ctx context.Context, user *models.User) error
-// 	GetUserByID(ctx context.Context, id uuid.UUID, user *models.User) error
-// 	UpdateUser(ctx context.Context, user *models.User) error
-// 	DeleteUser(ctx context.Context, id uuid.UUID) error
-// 	ListUsers(ctx context.Context, user []models.User) error
-// }
 type UserRepo struct {
 	db *bun.DB
 }

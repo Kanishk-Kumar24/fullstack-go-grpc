@@ -19,6 +19,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
+	"github.com/rs/cors"
 )
 
 const (
@@ -102,9 +103,15 @@ func runHttpServer(ctx context.Context) error {
 		return err
 	}
 
+	corsMiddleware := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"},
+	})
+
 	server := &http.Server{
 		Addr:    ":" + httpPort,
-		Handler: mux,
+		Handler: corsMiddleware.Handler(mux),
 	}
 
 	// Graceful shutdown for the HTTP server

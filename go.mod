@@ -7,6 +7,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.2
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.13.4
+	github.com/rs/cors v1.11.1
 	github.com/uptrace/bun v1.2.15
 	github.com/uptrace/bun/dialect/pgdialect v1.2.15
 	github.com/uptrace/bun/driver/pgdriver v1.2.15

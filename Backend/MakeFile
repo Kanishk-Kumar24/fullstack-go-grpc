@@ -1,7 +1,12 @@
-.PHONY: run proto
+.PHONY: run proto run-all
 
 run:
 	go run main.go
+
+run-all:
+	@echo "Starting backend and webapp servers..."
+	@cmd /c start make run
+	@cd ../webapps && cmd /c start make run
 	
 proto:
 	@echo "Generating protobuf code..."

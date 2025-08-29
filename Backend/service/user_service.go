@@ -11,16 +11,6 @@ import (
 	"time"
 )
 
-// UserService provides business logic for user operations.
-// type UserService interface {
-// 	CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*models.User, error)
-// 	GetUserByID(ctx context.Context, id uuid.UUID) (*models.User, error)
-// 	UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*models.User, error)
-// 	DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) error
-// 	ListUsers(ctx context.Context) ([]models.User, error)
-// }
-
-
 type UserService struct{
 	userRepo repo.UserRepo
 }
@@ -94,6 +84,5 @@ func (s *UserService) ListUsers(ctx context.Context, req *pb.ListUsersRequest) (
 	for _, user := range users {
 		pbUsers = append(pbUsers, user.ConvertToProto())
 	}
-
 	return &pb.ListUsersResponse{Users: pbUsers}, nil
 }
