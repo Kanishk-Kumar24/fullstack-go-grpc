@@ -22,27 +22,27 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type U_ID struct {
+type UserGetterRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UniqueId      string                 `protobuf:"bytes,1,opt,name=unique_id,json=uniqueId,proto3" json:"unique_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *U_ID) Reset() {
-	*x = U_ID{}
+func (x *UserGetterRequest) Reset() {
+	*x = UserGetterRequest{}
 	mi := &file_user_user_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *U_ID) String() string {
+func (x *UserGetterRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*U_ID) ProtoMessage() {}
+func (*UserGetterRequest) ProtoMessage() {}
 
-func (x *U_ID) ProtoReflect() protoreflect.Message {
+func (x *UserGetterRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_user_user_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -54,12 +54,12 @@ func (x *U_ID) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use U_ID.ProtoReflect.Descriptor instead.
-func (*U_ID) Descriptor() ([]byte, []int) {
+// Deprecated: Use UserGetterRequest.ProtoReflect.Descriptor instead.
+func (*UserGetterRequest) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *U_ID) GetUniqueId() string {
+func (x *UserGetterRequest) GetUniqueId() string {
 	if x != nil {
 		return x.UniqueId
 	}
@@ -68,7 +68,7 @@ func (x *U_ID) GetUniqueId() string {
 
 type UserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Uid           *U_ID                  `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Uid           *UserGetterRequest     `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
 	User          *User                  `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -104,7 +104,7 @@ func (*UserRequest) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *UserRequest) GetUid() *U_ID {
+func (x *UserRequest) GetUid() *UserGetterRequest {
 	if x != nil {
 		return x.Uid
 	}
@@ -120,7 +120,7 @@ func (x *UserRequest) GetUser() *User {
 
 type UserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Uid           *U_ID                  `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Uid           *UserGetterRequest     `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
 	User          *User                  `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -156,7 +156,7 @@ func (*UserResponse) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *UserResponse) GetUid() *U_ID {
+func (x *UserResponse) GetUid() *UserGetterRequest {
 	if x != nil {
 		return x.Uid
 	}
@@ -366,17 +366,15 @@ var File_user_user_proto protoreflect.FileDescriptor
 
 const file_user_user_proto_rawDesc = "" +
 	"\n" +
-	"\x0fuser/user.proto\x12\x04user\x1a\x1cgoogle/api/annotations.proto\x1a\x0fuser/base.proto\"#\n" +
-	"\x04U_ID\x12\x1b\n" +
-	"\tunique_id\x18\x01 \x01(\tR\buniqueId\"K\n" +
-	"\vUserRequest\x12\x1c\n" +
-	"\x03uid\x18\x01 \x01(\v2\n" +
-	".user.U_IDR\x03uid\x12\x1e\n" +
+	"\x0fuser/user.proto\x12\x04user\x1a\x1cgoogle/api/annotations.proto\x1a\x0fuser/base.proto\"0\n" +
+	"\x11UserGetterRequest\x12\x1b\n" +
+	"\tunique_id\x18\x01 \x01(\tR\buniqueId\"X\n" +
+	"\vUserRequest\x12)\n" +
+	"\x03uid\x18\x01 \x01(\v2\x17.user.UserGetterRequestR\x03uid\x12\x1e\n" +
 	"\x04user\x18\x02 \x01(\v2\n" +
-	".user.UserR\x04user\"L\n" +
-	"\fUserResponse\x12\x1c\n" +
-	"\x03uid\x18\x01 \x01(\v2\n" +
-	".user.U_IDR\x03uid\x12\x1e\n" +
+	".user.UserR\x04user\"Y\n" +
+	"\fUserResponse\x12)\n" +
+	"\x03uid\x18\x01 \x01(\v2\x17.user.UserGetterRequestR\x03uid\x12\x1e\n" +
 	"\x04user\x18\x02 \x01(\v2\n" +
 	".user.UserR\x04user\"\x90\x01\n" +
 	"\x11UpdateUserRequest\x12\x1b\n" +
@@ -389,17 +387,15 @@ const file_user_user_proto_rawDesc = "" +
 	"\x10ListUsersRequest\"5\n" +
 	"\x11ListUsersResponse\x12 \n" +
 	"\x05users\x18\x01 \x03(\v2\n" +
-	".user.UserR\x05users2\xa6\x03\n" +
+	".user.UserR\x05users2\xc0\x03\n" +
 	"\vUserService\x12L\n" +
 	"\n" +
-	"CreateUser\x12\x11.user.UserRequest\x1a\x12.user.UserResponse\"\x17\x82\xd3\xe4\x93\x02\x11:\x04user\"\t/v1/users\x12H\n" +
-	"\aGetUser\x12\n" +
-	".user.U_ID\x1a\x12.user.UserResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/v1/users/{unique_id}\x12[\n" +
+	"CreateUser\x12\x11.user.UserRequest\x1a\x12.user.UserResponse\"\x17\x82\xd3\xe4\x93\x02\x11:\x04user\"\t/v1/users\x12U\n" +
+	"\aGetUser\x12\x17.user.UserGetterRequest\x1a\x12.user.UserResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/v1/users/{unique_id}\x12[\n" +
 	"\n" +
-	"UpdateUser\x12\x17.user.UpdateUserRequest\x1a\x12.user.UserResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\x1a\x15/v1/users/{unique_id}\x12Q\n" +
+	"UpdateUser\x12\x17.user.UpdateUserRequest\x1a\x12.user.UserResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\x1a\x15/v1/users/{unique_id}\x12^\n" +
 	"\n" +
-	"DeleteUser\x12\n" +
-	".user.U_ID\x1a\x18.user.DeleteUserResponse\"\x1d\x82\xd3\xe4\x93\x02\x17*\x15/v1/users/{unique_id}\x12O\n" +
+	"DeleteUser\x12\x17.user.UserGetterRequest\x1a\x18.user.DeleteUserResponse\"\x1d\x82\xd3\xe4\x93\x02\x17*\x15/v1/users/{unique_id}\x12O\n" +
 	"\tListUsers\x12\x16.user.ListUsersRequest\x1a\x17.user.ListUsersResponse\"\x11\x82\xd3\xe4\x93\x02\v\x12\t/v1/usersB\x1fZ\x1dfullstack-go-grpc/protos/userb\x06proto3"
 
 var (
@@ -416,7 +412,7 @@ func file_user_user_proto_rawDescGZIP() []byte {
 
 var file_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_user_user_proto_goTypes = []any{
-	(*U_ID)(nil),               // 0: user.U_ID
+	(*UserGetterRequest)(nil),  // 0: user.UserGetterRequest
 	(*UserRequest)(nil),        // 1: user.UserRequest
 	(*UserResponse)(nil),       // 2: user.UserResponse
 	(*UpdateUserRequest)(nil),  // 3: user.UpdateUserRequest
@@ -427,16 +423,16 @@ var file_user_user_proto_goTypes = []any{
 	(*Address)(nil),            // 8: user.Address
 }
 var file_user_user_proto_depIdxs = []int32{
-	0,  // 0: user.UserRequest.uid:type_name -> user.U_ID
+	0,  // 0: user.UserRequest.uid:type_name -> user.UserGetterRequest
 	7,  // 1: user.UserRequest.user:type_name -> user.User
-	0,  // 2: user.UserResponse.uid:type_name -> user.U_ID
+	0,  // 2: user.UserResponse.uid:type_name -> user.UserGetterRequest
 	7,  // 3: user.UserResponse.user:type_name -> user.User
 	8,  // 4: user.UpdateUserRequest.address:type_name -> user.Address
 	7,  // 5: user.ListUsersResponse.users:type_name -> user.User
 	1,  // 6: user.UserService.CreateUser:input_type -> user.UserRequest
-	0,  // 7: user.UserService.GetUser:input_type -> user.U_ID
+	0,  // 7: user.UserService.GetUser:input_type -> user.UserGetterRequest
 	3,  // 8: user.UserService.UpdateUser:input_type -> user.UpdateUserRequest
-	0,  // 9: user.UserService.DeleteUser:input_type -> user.U_ID
+	0,  // 9: user.UserService.DeleteUser:input_type -> user.UserGetterRequest
 	5,  // 10: user.UserService.ListUsers:input_type -> user.ListUsersRequest
 	2,  // 11: user.UserService.CreateUser:output_type -> user.UserResponse
 	2,  // 12: user.UserService.GetUser:output_type -> user.UserResponse

@@ -28,7 +28,7 @@ func (c *UserController) CreateUser(ctx context.Context, req *pb.UserRequest) (*
 	return createdUser, nil
 }
 
-func (c *UserController) GetUser(ctx context.Context, req *pb.U_ID) (*pb.UserResponse, error) {
+func (c *UserController) GetUser(ctx context.Context, req *pb.UserGetterRequest) (*pb.UserResponse, error) {
 	log.Printf("GetUser RPC called with ID: %s", req.UniqueId)
 	id, err := uuid.Parse(req.UniqueId)
 	if err != nil {
@@ -50,7 +50,7 @@ func (c *UserController) UpdateUser(ctx context.Context, req *pb.UpdateUserReque
 	return updatedUser, nil
 }
 
-func (c *UserController) DeleteUser(ctx context.Context, req *pb.U_ID) (*pb.DeleteUserResponse, error) {
+func (c *UserController) DeleteUser(ctx context.Context, req *pb.UserGetterRequest) (*pb.DeleteUserResponse, error) {
 	log.Printf("DeleteUser RPC called with ID: %s", req.UniqueId)
 	deletedUser, err := c.userService.DeleteUser(ctx, req)
 	if err != nil {

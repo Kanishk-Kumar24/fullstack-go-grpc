@@ -15,7 +15,7 @@ service UserService {
         };
     }
 
-    rpc GetUser(U_ID) returns (UserResponse) {
+    rpc GetUser(UserGetterRequest) returns (UserResponse) {
         option (google.api.http) = {
             get: "/v1/users/{unique_id}"
         };
@@ -28,7 +28,7 @@ service UserService {
         };
     }
 
-    rpc DeleteUser(U_ID) returns (DeleteUserResponse) {
+    rpc DeleteUser(UserGetterRequest) returns (DeleteUserResponse) {
         option (google.api.http) = {
             delete: "/v1/users/{unique_id}"
         };
@@ -41,16 +41,19 @@ service UserService {
     }
 }
 
-message U_ID{
+// U_ID => ye kya hota hai ???
+// isme kaise pata chalega ki Request hai ki Respose ???
+
+message UserGetterRequest{
     string unique_id=1;
 }
 
 message UserRequest {
-    U_ID uid =1;
+    UserGetterRequest uid =1;
     User user =2;
 }
 message UserResponse {
-    U_ID uid =1;
+    UserGetterRequest uid =1;
     User user = 2;
 }
 message UpdateUserRequest {
