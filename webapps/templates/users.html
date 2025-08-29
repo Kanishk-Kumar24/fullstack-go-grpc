@@ -1,35 +1,62 @@
-{{template "layout.html"}}
-
-{{define "content"}}
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Users List</h2>
-    <a href="/users/new" class="btn btn-primary">Add New User</a>
-</div>
-<table class="table table-striped">
-    <thead>
-        <tr>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Go Full-Stack App</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/users">Go User Manager</a>
+      </div>
+    </nav>
+    <div class="container mt-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Users List</h2>
+        <a href="/users/new" class="btn btn-primary">Add New User</a>
+      </div>
+      <table class="table table-striped">
+        <thead>
+          <tr>
             <th>Name</th>
             <th>Email</th>
             <th>Phone</th>
             <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{range .Users}}
-        <tr>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .Users}}
+          <tr>
             <td><a href="/users/{{.UniqueId}}">{{.Name}}</a></td>
             <td>{{.Email}}</td>
             <td>{{.PhoneNumber}}</td>
             <td>
-                <a href="/users/edit/{{.UniqueId}}" class="btn btn-sm btn-secondary">Edit</a>
-                <button class="btn btn-sm btn-danger" onclick="deleteUser('{{.UniqueId}}')">Delete</button>
+              <a
+                href="/users/edit/{{.UniqueId}}"
+                class="btn btn-sm btn-secondary"
+                >Edit</a
+              >
+              <button
+                class="btn btn-sm btn-danger"
+                onclick="deleteUser('{{.UniqueId}}')"
+              >
+                Delete
+              </button>
             </td>
-        </tr>
-        {{else}}
-        <tr>
+          </tr>
+          {{else}}
+          <tr>
             <td colspan="4" class="text-center">No users found.</td>
-        </tr>
-        {{end}}
-    </tbody>
-</table>
-{{end}}
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+    </div>
+    <script src="/static/js/main.js"></script>
+  </body>
+</html>

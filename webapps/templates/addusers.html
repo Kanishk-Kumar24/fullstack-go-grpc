@@ -13,33 +13,31 @@
         </div>
     </nav>
     <div class="container mt-4">
-    
-    
-<h2>{{.Title}}</h2>
+    <h2>{{.Title}}</h2>
 <form id="userForm">
     <div class="mb-3">
         <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control" id="name" name="name" value="{{.User.Name}}" required>
+        <input type="text" class="form-control" id="name" name="name" >
     </div>
     <div class="mb-3">
         <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="email" value="{{.User.Email}}" required {{if .User}}readonly{{end}}>
+        <input type="email" class="form-control" id="email" name="email" >
     </div>
     <div class="mb-3">
         <label for="phone_number" class="form-label">Phone Number</label>
-        <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{.User.PhoneNumber}}">
+        <input type="tel" class="form-control" id="phone_number" name="phone_number" >
     </div>
     <div class="mb-3">
         <label for="dob" class="form-label">Date of Birth</label>
-        <input type="date" class="form-control" id="dob" name="dob" value="{{if .User}}{{.User.Dob.AsTime.Format "2006-01-02"}}{{end}}">
+        <input type="date" class="form-control" id="dob" name="dob" >
     </div>
     <div class="mb-3">
         <label for="country" class="form-label">Country</label>
-        <input type="text" class="form-control" id="country" name="country" value="{{.User.Address.Country}}">
+        <input type="text" class="form-control" id="country" name="country" >
     </div>
      <div class="mb-3">
         <label for="state" class="form-label">State</label>
-        <input type="text" class="form-control" id="state" name="state" value="{{.User.Address.State}}">
+        <input type="text" class="form-control" id="state" name="state" >
     </div>
     <button type="submit" class="btn btn-success" data-method="{{.Method}}" data-action="{{.Action}}">Submit</button>
     <a href="/users" class="btn btn-secondary">Cancel</a>

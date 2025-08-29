@@ -3,13 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
+	pb "fullstack-go-grpc/protos/user"
 	"html/template"
 	"io"
 	"log"
 	"net/http"
 	"time"
-
-	pb "fullstack-go-grpc/protos/user"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -68,6 +67,7 @@ func main() {
 // --- Handlers ---
 
 func listUsersHandler(c echo.Context) error {
+	// fmt.Println("==============================I am in listuserHandler======================")
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
@@ -75,6 +75,12 @@ func listUsersHandler(c echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusInternalServerError, fmt.Sprintf("Error listing users: %v", err))
 	}
+	// a, err := json.Marshal(resp)
+	// if err != nil {
+	// 	log.Fatalf("ruk jaa bsdk ")
+	// 	return err
+	// }
+	// fmt.Println("resp ", string(a))
 
 	return c.Render(http.StatusOK, "users.html", map[string]interface{}{
 		"Users": resp.Users,
@@ -97,7 +103,9 @@ func getUserHandler(c echo.Context) error {
 }
 
 func newUserFormHandler(c echo.Context) error {
-	return c.Render(http.StatusOK, "form.html", map[string]interface{}{
+	fmt.Println("======================i am here ========>>>>>>>>>>")
+	
+	return c.Render(http.StatusOK, "addusers.html", map[string]interface{}{
 		"Title":  "Create New User",
 		"Action": "/v1/users", // Backend REST endpoint
 		"Method": "POST",

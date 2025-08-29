@@ -1,7 +1,19 @@
-{{template "layout.html"}}
-
-{{define "content"}}
-<h2>{{.Title}}</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Full-Stack App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/users">Go User Manager</a>
+        </div>
+    </nav>
+    <div class="container mt-4">
+    
 <form id="userForm">
     <div class="mb-3">
         <label for="name" class="form-label">Name</label>
@@ -27,7 +39,12 @@
         <label for="state" class="form-label">State</label>
         <input type="text" class="form-control" id="state" name="state" value="{{.User.Address.State}}">
     </div>
-    <button type="button" onclick="submitForm('{{.Method}}', '{{.Action}}')" class="btn btn-success">Submit</button>
+    <button type="submit" class="btn btn-success" data-method="{{.Method}}" data-action="{{.Action}}">Submit</button>
     <a href="/users" class="btn btn-secondary">Cancel</a>
 </form>
-{{end}}
+
+    
+    </div>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
